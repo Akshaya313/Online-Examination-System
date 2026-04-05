@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Online Exam</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Result display styling */
+        #result {
+            width: 50%;
+            margin: 20px auto;
+            padding: 15px;
+            background-color: #e0ffe0;
+            border: 2px solid green;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 5px;
+            display: none; /* Hidden initially */
+        }
+    </style>
+</head>
+<body>
+
+<h1 align="center">Online Examination Portal</h1>
+
+<nav>
+    <link rel="stylesheet" href="index.css">
+    <a href="index.html">Home</a>
+    <a href="exam.html">Exam</a>
+    <a href="signin.html">Sign In</a>
+    <a href="contactjs.html">Contact</a>
+</nav>
+
+<h1><u>ONLINE EXAMINATION SYSTEM</u></h1>
+<hr>
+
+<!-- Student Details Table -->
+<table class="info-table">
+    <tr>
+        <th colspan="2">Student Details</th>
+    </tr>
+    <tr>
+        <td><b>Name</b></td>
+        <td><input type="text" placeholder="Enter Name"></td>
+    </tr>
+    <tr>
+        <td><b>Register No</b></td>
+        <td><input type="text" placeholder="Enter Register Number"></td>
+    </tr>
+    <tr>
+        <td><b>Subject</b></td>
+        <td>
+            <select>
+                <option>Mathematics</option>
+                <option>Science</option>
+                <option>Computer Science</option>
+            </select>
+        </td>
+    </tr>
+</table>
+
+<!-- Exam Form -->
+<form id="examForm">
+    <h2>Multiple Choice Questions</h2>
+
+    <p><b>1. HTML stands for?</b></p>
+    <input type="radio" name="q1" value="1"> Hyper Text Markup Language<br>
+    <input type="radio" name="q1" value="0"> High Text Machine Language<br>
+    <input type="radio" name="q1" value="0"> Hyperlink and Text Markup Language<br>
+
+    <p><b>2. Which tag is used for a table row?</b></p>
+    <input type="radio" name="q2" value="0"> &lt;td&gt;<br>
+    <input type="radio" name="q2" value="1"> &lt;tr&gt;<br>
+    <input type="radio" name="q2" value="0"> &lt;th&gt;<br>
+
+    <p><b>3. CSS is used for?</b></p>
+    <input type="radio" name="q3" value="0"> Database<br>
+    <input type="radio" name="q3" value="1"> Styling Web Pages<br>
+    <input type="radio" name="q3" value="0"> Programming Logic<br>
+
+    <p><b>4. Full form of CPU:</b></p>
+    <input type="text" id="q4" placeholder="Type your answer here..."><br>
+
+    <br>
+    <input type="submit" value="Submit Exam">
+    <input type="reset" value="Clear Answers">
+</form>
+
+<!-- Result Display -->
+<div id="result"></div>
+
+<hr>
+<p align="center"><small><b>Note:</b> Do not refresh the page during the exam.</small></p>
+
+<script>
+document.getElementById("examForm").addEventListener("submit", function(e) {
+    e.preventDefault(); // Prevent page reload
+
+    let score = 0;
+
+    // Get radio button answers
+    const q1 = document.querySelector('input[name="q1"]:checked');
+    const q2 = document.querySelector('input[name="q2"]:checked');
+    const q3 = document.querySelector('input[name="q3"]:checked');
+
+    if(q1) score += parseInt(q1.value);
+    if(q2) score += parseInt(q2.value);
+    if(q3) score += parseInt(q3.value);
+
+    // Check descriptive question
+    const q4Answer = document.getElementById("q4").value.trim().toLowerCase();
+    if(q4Answer === "central processing unit") score += 1;
+
+    // Display result
+    const resultDiv = document.getElementById("result");
+    resultDiv.style.display = "block";
+    resultDiv.textContent = `You scored ${score} out of 4.`;
+
+    // Optionally disable form after submission
+    document.getElementById("examForm").querySelectorAll("input, textarea, select").forEach(el => el.disabled = true);
+});
+</script>
+
+</body>
+</html>

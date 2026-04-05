@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sign In</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1 align="center">Online Examination Portal</h1>
+
+    <nav>
+        <link rel="stylesheet" href="index.css">
+        <a href="index.html">Home</a>
+        <a href="exam.html">Exam</a>
+        <a href="signin.html">Sign In</a>
+        <a href="contactjs.html">Contact</a>
+    </nav>
+
+    <h1><u>Sign In</u></h1>
+    <hr>
+
+    <!-- Sign In Form -->
+    <form id="signinForm">
+        <h2>User Login</h2>
+        <table class="info-table">
+            <tr>
+                <td><b>Username:</b></td>
+                <td><input type="text" placeholder="Enter Username" required></td>
+            </tr>
+            <tr>
+                <td><b>Password:</b></td>
+                <td><input type="password" placeholder="Enter Password" required></td>
+            </tr>
+        </table>
+        <br>
+        <input type="submit" value="Sign In">
+        <input type="reset" value="Clear">
+    </form>
+
+    <!-- Success Message -->
+    <p id="successMsg" style="display:none; color:green; text-align:center; font-weight:bold;">
+        ✅ Successfully Signed In!
+    </p>
+
+    <hr>
+    <p align="center"><small><b>Note:</b> Keep your password secure.</small></p>
+
+    <!-- JavaScript -->
+    <script>
+        document.getElementById("signinForm").addEventListener("submit", function(e) {
+            e.preventDefault(); // prevent page refresh
+            document.getElementById("successMsg").style.display = "block";
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Contact Us</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h1 align="center">Online Examination Portal</h1>
+
+<nav>
+    <link rel="stylesheet" href="index.css">
+    <a href="index.html">Home</a>
+    <a href="exam.html">Exam</a>
+    <a href="signin.html">Sign In</a>
+    <a href="contactjs.html">Contact</a>
+</nav>
+
+<h1><u>Contact Us</u></h1>
+<hr>
+
+<form>
+    <h2>Send Your Message</h2>
+    <b>Contact us:</b>
+    <p><input id="contactNumber" readonly></p>
+    <table class="info-table">
+        <tr>
+            <td><b>Name:</b></td>
+            <td><input type="text" placeholder="Enter Name" required></td>
+        </tr>
+        <tr>
+            <td><b>Email:</b></td>
+            <td><input type="email" placeholder="Enter Email" required></td>
+        </tr>
+        <tr>
+            <td><b>Contact Number:</b></td>
+            <td><input type="text" placeholder="Enter Contact Number" required></td>
+        </tr>
+        <tr>
+            <td><b>Message:</b></td>
+            <td><textarea rows="4" placeholder="Write your message here..." required></textarea></td>
+        </tr>
+    </table>
+    <br><br>
+    <input type="submit" value="Send Message">
+    <input type="reset" value="Clear">
+</form>
+
+<hr>
+<p align="center"><small><b>Note:</b> We will respond within 24 hours.</small></p>
+
+<script>
+    function Number() {
+        let num = 9345781230;
+        return num;
+    }
+
+    document.getElementById("contactNumber").value = Number();
+</script>
+
+</body>
+</html>
