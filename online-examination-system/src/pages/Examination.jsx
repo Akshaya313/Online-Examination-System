@@ -27,6 +27,20 @@ function Examination() {
     const result = calculateScore(answers);
 
     setScore(result);
+
+    // Save result to localStorage for marksheet
+    const examResult = {
+      examName: "General Knowledge Quiz",
+      date: new Date().toISOString().split('T')[0],
+      score: result,
+      totalScore: questions.length,
+      percentage: Math.round((result / questions.length) * 100),
+      answers: answers
+    };
+
+    const existingResults = JSON.parse(localStorage.getItem('examResults') || '[]');
+    existingResults.push(examResult);
+    localStorage.setItem('examResults', JSON.stringify(existingResults));
   }
 
   return (

@@ -1,11 +1,14 @@
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 function Marksheet() {
-  const sampleResults = [
-    { examName: "General Knowledge Quiz", date: "2026-04-07", score: 18, totalScore: 30, percentage: 60 },
-    { examName: "Science Assessment", date: "2026-04-06", score: 25, totalScore: 30, percentage: 83 },
-    { examName: "Mathematics Test", date: "2026-04-05", score: 27, totalScore: 30, percentage: 90 }
-  ];
+  const [results, setResults] = useState([]);
+
+  useEffect(() => {
+    // Load results from localStorage
+    const storedResults = JSON.parse(localStorage.getItem('examResults') || '[]');
+    setResults(storedResults);
+  }, []);
 
   const getGrade = (percentage) => {
     if (percentage >= 90) return { grade: "A+", color: "#27ae60" };
@@ -15,22 +18,42 @@ function Marksheet() {
     return { grade: "F", color: "#e74c3c" };
   };
 
+  const clearResults = () => {
+    localStorage.removeItem('examResults');
+    setResults([]);
+  };
+
+  const averagePercentage = results.length > 0 
+    ? Math.round(results.reduce((sum, result) => sum + result.percentage, 0) / results.length)
+    : 0;
+
   return (
     <div>
       <h1>Your Marksheet</h1>
       <p>View your examination results and performance analytics.</p>
       
       <div style={{ maxWidth: "900px", margin: "30px auto" }}>
-        {sampleResults.length > 0 ? (
+        {results.length > 0 ? (
           <div>
-            <h3 style={{ marginBottom: "20px", textAlign: "center" }}>Examination History</h3>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
+              <h3>Examination History</h3>
+              <button onClick={clearResults} style={{
+                padding: "8px 16px",
+                background: "#e74c3c",
+                color: "white",
+                border: "none",
+                borderRadius: "6px",
+                cursor: "pointer",
+                fontSize: "0.9rem"
+              }}>Clear All Results</button>
+            </div>
             <div style={{
               display: "grid",
               gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
               gap: "20px",
               marginBottom: "30px"
             }}>
-              {sampleResults.map((result, index) => {
+              {results.map((result, index) => {
                 const { grade, color } = getGrade(result.percentage);
                 return (
                   <div key={index} style={{
@@ -89,9 +112,12 @@ function Marksheet() {
               textAlign: "center"
             }}>
               <h3>Overall Performance</h3>
-              <p style={{ fontSize: "1.1rem", marginBottom: "20px" }}>Average Score: <strong>85.67%</strong></p>
+              <p style={{ fontSize: "1.1rem", marginBottom: "20px" }}>Average Score: <strong>{averagePercentage}%</strong></p>
               <p style={{ color: "#666", marginBottom: "20px" }}>
-                Great job! Continue improving your skills by taking more examinations.
+                {results.length === 1 ? "Great job on your first exam!" : 
+                 averagePercentage >= 80 ? "Excellent performance! Keep it up!" :
+                 averagePercentage >= 60 ? "Good progress! Continue practicing." :
+                 "Keep working hard to improve your scores."}
               </p>
               <Link to="/examination" style={{
                 display: "inline-block",
