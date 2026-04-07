@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 
 import {
@@ -16,27 +16,6 @@ function Examination() {
   const [submitting, setSubmitting] = useState(false);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!isAuthenticated()) {
-      navigate('/signin');
-      return;
-    }
-
-    const loadQuestions = async () => {
-      try {
-        const fetchedQuestions = await getQuestions();
-        setQuestions(fetchedQuestions);
-        setAnswers(new Array(fetchedQuestions.length).fill(""));
-      } catch (error) {
-        console.error('Error loading questions:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadQuestions();
-  }, [navigate]);
-
   function handleOptionChange(qIndex, option) {
     const newAnswers = [...answers];
     newAnswers[qIndex] = option;
@@ -48,7 +27,12 @@ function Examination() {
 
     setSubmitting(true);
     try {
-      const result = await submitExam(answers, calculateScore(answers, questions), questions.length);
+      console.log('Submitting exam with answers:', answers);
+      console.log('Questions count:', questions.length);
+      const calculatedScore = calculateScore(answers, questions);
+      console.log('Calculated score:', calculatedScore);
+      const result = await submitExam(answers, calculatedScore, questions.length);
+      console.log('Submit result:', result);
       setScore(result.score);
     } catch (error) {
       console.error('Error submitting exam:', error);
@@ -57,6 +41,28 @@ function Examination() {
       setSubmitting(false);
     }
   }
+
+  useEffect(() => {
+    if (!isAuthenticated()) {
+      navigate('/signin');
+      return;
+    }
+
+    const loadQuestions = async () => {
+      try {
+        const fetchedQuestions = await getQuestions();
+        console.log('Loaded questions:', fetchedQuestions.length, fetchedQuestions);
+        setQuestions(fetchedQuestions);
+        setAnswers(new Array(fetchedQuestions.length).fill(""));
+      } catch (error) {
+        console.error('Error loading questions:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadQuestions();
+  }, [navigate]);
 
   if (loading) {
     return (

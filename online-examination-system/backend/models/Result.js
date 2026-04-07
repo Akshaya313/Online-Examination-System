@@ -1,13 +1,71 @@
-const mongoose = require('mongoose');
+class Result {
+  constructor(db) {
+    this.db = db;
+  }
 
-const ResultSchema = new mongoose.Schema({
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-  examName: { type: String, default: 'General Knowledge Quiz' },
-  answers: [{ type: String }],
-  score: { type: Number, required: true },
-  totalQuestions: { type: Number, required: true },
-  percentage: { type: Number, required: true },
-  date: { type: Date, default: Date.now }
-});
+  // Create a new result
+  async create(resultData) {
+    const { userId, score, totalScore, percentage, answers } = resultData;
+    const [result] = await this.db.execute(
+      'INSERT INTO results (user_id, score, total_score, percentage, answers) VALUES (?, ?, ?, ?, ?)',
+      [userId, score, totalScore, percentage, JSON.stringify(answers || [])]
+    );
+    return result.insertId;
+  }
 
-module.exports = mongoose.model('Result', ResultSchema);
+  // Get results by user ID
+  async findByUserId(userId) {
+    const [rows] = await this.db.execute(
+      'SELECT id, score, total_score, percentage, answers, exam_date FROM results WHERE user_id = ? ORDER BY exam_date DESC',
+      [userId]
+    );
+    return rows.map(row => ({
+      id: row.id,
+      examName: 'General Knowledge Quiz',
+      score: row.score,
+      totalScore: row.total_score,
+      percentage: row.percentage,
+      answers: JSON.parse(row.answers || '[]'),
+      date: row.exam_date
+    }));
+  }
+
+  // Get all results (for admin)
+  async findAll() {
+    const [rows] = await this.db.execute(`
+      SELECT r.id, r.score, r.total_score, r.percentage, r.answers, r.exam_date,
+             u.username, u.email
+      FROM results r
+      JOIN users u ON r.user_id = u.id
+      ORDER BY r.exam_date DESC
+    `);
+    return rows.map(row => ({
+      id: row.id,
+      examName: 'General Knowledge Quiz',
+      score: row.score,
+      totalScore: row.total_score,
+      percentage: row.percentage,
+      answers: JSON.parse(row.answers || '[]'),
+      date: row.exam_date,
+      user: {
+        username: row.username,
+        email: row.email
+      }
+    }));
+  }
+
+  // Get result statistics
+  async getStats() {
+    const [rows] = await this.db.execute(`
+      SELECT
+        COUNT(*) as total_exams,
+        AVG(percentage) as avg_percentage,
+        MAX(percentage) as highest_score,
+        MIN(percentage) as lowest_score
+      FROM results
+    `);
+    return rows[0];
+  }
+}
+
+module.exports = Result;
