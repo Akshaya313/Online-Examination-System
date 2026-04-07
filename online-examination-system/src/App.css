@@ -1,13 +1,13 @@
 .container {
-  max-width: 1200px;
+  max-width: 1600px; /* Increased from 1200px */
   margin: 0 auto;
-  padding: 40px 20px;
+  padding: 40px 30px; /* Increased horizontal padding */
   min-height: calc(100vh - 80px);
 }
 
 h1 {
   color: #2c3e50;
-  font-size: 2.5rem;
+  font-size: 3rem; /* Increased from 2.5rem */
   margin-bottom: 20px;
   text-align: center;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -18,32 +18,32 @@ h1 {
 
 h2 {
   color: #34495e;
-  font-size: 1.8rem;
+  font-size: 2.2rem; /* Increased from 1.8rem */
   margin: 20px 0;
   text-align: center;
 }
 
 h3 {
   color: #2c3e50;
-  font-size: 1.3rem;
+  font-size: 1.6rem; /* Increased from 1.3rem */
   margin: 15px 0 10px 0;
 }
 
 p {
   color: #555;
-  font-size: 1rem;
+  font-size: 1.2rem; /* Increased from 1rem */
   margin: 10px 0;
   text-align: center;
 }
 
 button {
-  padding: 12px 30px;
+  padding: 14px 35px; /* Increased from 12px 30px */
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   border: none;
   border-radius: 25px;
   cursor: pointer;
-  font-size: 1rem;
+  font-size: 1.1rem; /* Increased from 1rem */
   font-weight: 600;
   transition: all 0.3s ease;
   box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);

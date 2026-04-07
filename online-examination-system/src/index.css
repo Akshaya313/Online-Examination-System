@@ -9,6 +9,7 @@ body {
   background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
   color: #2c3e50;
   line-height: 1.6;
+  font-size: 18px; /* Increased from default 16px */
 }
 
 html, body, #root {
@@ -41,7 +42,7 @@ nav a {
   color: white;
   text-decoration: none;
   font-weight: 600;
-  font-size: 16px;
+  font-size: 18px; /* Increased from 16px */
   padding: 10px 20px;
   border-radius: 25px;
   transition: all 0.3s ease;
