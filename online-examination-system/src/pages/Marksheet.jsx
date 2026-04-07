@@ -1,14 +1,31 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { getUserResults, isAuthenticated } from "../utils/examLogic";
 
 function Marksheet() {
   const [results, setResults] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    // Load results from localStorage
-    const storedResults = JSON.parse(localStorage.getItem('examResults') || '[]');
-    setResults(storedResults);
-  }, []);
+    if (!isAuthenticated()) {
+      navigate('/signin');
+      return;
+    }
+
+    const loadResults = async () => {
+      try {
+        const userResults = await getUserResults();
+        setResults(userResults);
+      } catch (error) {
+        console.error('Error loading results:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadResults();
+  }, [navigate]);
 
   const getGrade = (percentage) => {
     if (percentage >= 90) return { grade: "A+", color: "#27ae60" };
@@ -19,6 +36,8 @@ function Marksheet() {
   };
 
   const clearResults = () => {
+    // Note: In a real app, you'd call an API to delete results
+    // For now, we'll just clear localStorage as fallback
     localStorage.removeItem('examResults');
     setResults([]);
   };
@@ -26,6 +45,15 @@ function Marksheet() {
   const averagePercentage = results.length > 0 
     ? Math.round(results.reduce((sum, result) => sum + result.percentage, 0) / results.length)
     : 0;
+
+  if (loading) {
+    return (
+      <div>
+        <h1>Your Marksheet</h1>
+        <p>Loading your results...</p>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -45,7 +73,7 @@ function Marksheet() {
                 borderRadius: "6px",
                 cursor: "pointer",
                 fontSize: "0.9rem"
-              }}>Clear All Results</button>
+              }}>Clear Local Results</button>
             </div>
             <div style={{
               display: "grid",
@@ -139,6 +167,7 @@ function Marksheet() {
             textAlign: "center"
           }}>
             <p style={{ fontSize: "1.2rem", marginBottom: "20px" }}>No examination results yet.</p>
+            <p style={{ color: "#666", marginBottom: "20px" }}>Complete your first exam to see your results here.</p>
             <Link to="/examination" style={{
               display: "inline-block",
               padding: "12px 30px",
